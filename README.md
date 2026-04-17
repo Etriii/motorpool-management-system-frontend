@@ -156,5 +156,3 @@ Make sure you have installed:
 * Node.js (v16 or higher recommended)
 * npm / pnpm / yarn
 
-```
-```
