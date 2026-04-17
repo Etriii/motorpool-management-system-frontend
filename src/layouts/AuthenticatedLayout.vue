@@ -25,7 +25,8 @@ const contentClass = computed(() => {
 })
 
 
-const { user } = useAuth();
+// const { user } = useAuth();
+const user = ref({ username: 'User', profile: null })
 const currentUser = user.value
 
 const { width } = useScreenWidth()
@@ -37,7 +38,7 @@ const isMobile = computed(() => width.value < 768)
         @click="isSidebarOpen = false">
     </div>
 
-    <Sidebar :sidebarWidth="sidebarWidth" :isSidebarOpen="isSidebarOpen" :isMobile="isMobile" :user="user" />
+    <Sidebar :sidebarWidth="sidebarWidth" :isSidebarOpen="isSidebarOpen" :isMobile="isMobile" />
 
     <Navbar :isSidebarOpen="isSidebarOpen" :contentClass="contentClass" :toggleSidebar="toggleSidebar"
         :pageTitle="pageTitle" :username="currentUser.username" :profilePicPath="currentUser.profile" />

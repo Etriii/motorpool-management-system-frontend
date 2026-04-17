@@ -23,7 +23,7 @@ watch(
     }
 )
 
-const { isStudent } = useAuth()
+// const { isStudent } = useAuth()
 
 </script>
 
@@ -37,11 +37,11 @@ const { isStudent } = useAuth()
     ]">
         <div class="flex items-center gap-4 px-5 py-2 shadow-sm">
             <img :src="icsa_logo" alt="icsa_logo" width="40">
-            <p class="text-xl font-semibold">ICCMS</p>
+            <p class="text-xl font-semibold">MMS</p>
         </div>
 
         <div class="space-y-1 px-2 py-2 overflow-y-auto h-[93vh]">
-            <SidebarLink :icon="LayoutDashboard" label="Dashboard" to="/" exact />
+            <!-- <SidebarLink :icon="LayoutDashboard" label="Dashboard" to="/" exact />
             <SidebarLink v-if="!isStudent()" :icon="UsersRound" label="Students" to="/students" />
             <SidebarLink :icon="HandCoins" label="Fees" to="/fees" />
             <SidebarLink v-if="!isStudent()" :icon="GitPullRequestArrow" label="Generated Fees" to="/generated-fees" />
@@ -51,7 +51,7 @@ const { isStudent } = useAuth()
             <SidebarLink v-if="!isStudent()" :icon="FileText" label="Reports" to="/reports" />
             <SidebarLink v-if="!isStudent()" :icon="History" label="Activity" to="/activities" />
             <SidebarLink v-if="isStudent()" :icon="CircleQuestionMark" label="My Transactions" to="/my-transactions" />
-            <SidebarLink v-if="isStudent()" :icon="CircleQuestionMark" label="My Gcash payments" to="/my-gcash-payments" />
+            <SidebarLink v-if="isStudent()" :icon="CircleQuestionMark" label="My Gcash payments" to="/my-gcash-payments" /> -->
         </div>
     </aside>
 </template>

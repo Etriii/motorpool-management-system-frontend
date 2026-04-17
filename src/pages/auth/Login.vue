@@ -1,0 +1,145 @@
+<template>
+    <div class="mx-auto w-auto border text-black bg-[#ffffff] border-purple-100 shadow-lg rounded-md p-2">
+        <div class="p-4">
+            <h1 class="text-center text-md font-semibold text-purple-800">
+                Administrator
+            </h1>
+            <div class="text-center text-sm text-gray-600">
+                Welcome back! Please sign-in to continue
+            </div>
+
+            <br>
+
+            <form @submit.prevent="handleLoginButtonClick" class="space-y-2">
+                <Input label="Username" v-model="loginForm.username" :leftIcon="CircleUser"
+                    :error="loginForm.username_error" placeholder="Enter your username" required />
+
+                <Input :type="loginForm.passwordIconToggled ? 'text' : 'password'" label="Password"
+                    v-model="loginForm.password" :leftIcon="LockKeyhole"
+                    :rightIcon="loginForm.passwordIconToggled ? Eye : EyeOff" placeholder="Enter your password" required
+                    :error="loginForm.password_error" @right-icon-click="handlePasswordIconClick" />
+
+
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <input id="remember-me" type="checkbox" name="remember"
+                            class="h-4 w-4 rounded border-gray-300 text-purple-500 focus:ring-purple-500">
+                            <label for="remember-me" class="ml-2 text-sm font-medium text-gray-600">
+                                Remember me
+                            </label>
+                    </div>
+                    <RouterLink to="/auth/account-recovery"
+                        class="text-sm font-medium text-purple-500 hover:text-purple-800">
+                        Forgot password?
+                    </RouterLink>
+                </div>
+                <!-- //disabled:loading -->
+                <Button variant="primary" size="md" :loading="loading" loadingText="Logging In..." :disabled="true"
+                    type="submit"
+                    className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white transition hover:from-purple-700 hover:to-indigo-700 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
+                    Log In
+                </Button>
+                <div>Kani lang sa pag log in, focus sa mo sa UI</div>
+                <Button variant="primary" size="md" :loading="loading" loadingText="Logging In..." :disabled="false"
+                    type="button"
+                    className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white transition hover:from-purple-700 hover:to-indigo-700 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
+                    Admin
+                </Button>
+                <Button variant="primary" size="md" :loading="loading" loadingText="Logging In..." :disabled="false"
+                    type="button"
+                    className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white transition hover:from-purple-700 hover:to-indigo-700 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
+                    Advisor
+                </Button>
+                <Button variant="primary" size="md" :loading="loading" loadingText="Logging In..." :disabled="false"
+                    type="button"
+                    className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white transition hover:from-purple-700 hover:to-indigo-700 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
+                    Driver
+                </Button>
+                <Button variant="primary" size="md" :loading="loading" loadingText="Logging In..." :disabled="false"
+                    type="button"
+                    className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white transition hover:from-purple-700 hover:to-indigo-700 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
+                    Passenger
+                </Button>
+            </form>
+
+            <p class="text-center text-gray-500 py-2">or</p>
+
+            <!-- 
+            <div id="g_id_onload"></div>
+            <div class="g_id_signin flex justify-center"></div>
+             -->
+
+            <div @click="googleLoginRedirect"
+                class="cursor-pointer flex items-center justify-center w-full border border-gray-300 rounded-md p-2 bg-white hover:bg-gray-100 transition">
+                <img src="https://developers.google.com/identity/images/g-logo.png" class="h-5 w-5 mr-2"
+                    alt="Google logo" />
+                <span class="text-sm text-gray-700">Sign in with Google</span>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import { useRouter } from 'vue-router';
+import { useAuth } from "@pages/auth/presentation/composables/useAuth";
+import { CircleUser, LockKeyhole, EyeOff, Eye } from "lucide-vue-next";
+
+import Input from "@components/forms/Input.vue";
+import Button from "@components/button/Button.vue";
+
+const router = useRouter();
+const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
+const { login, loginWithGoogle, googleLoginRedirect, loading, error } = useAuth(googleClientId);
+
+
+const inputElement = ref(null);
+
+const loginForm = ref({
+    username: "",
+    username_error: "",
+    password: "",
+    password_error: "",
+    passwordIconToggled: false
+});
+
+onMounted(async () => {
+    if (inputElement.value && inputElement.value.input) {
+        inputElement.value.input.focus();
+    }
+    const hashParams = new URLSearchParams(
+        window.location.hash.replace("#", "?")
+    );
+
+    const idToken = hashParams.get("id_token");
+
+    if (idToken) {
+        try {
+            console.log(idToken)
+            await loginWithGoogle(idToken);
+            router.replace("/");
+        } catch (error) {
+            console.error("Google login failed", error);
+            router.replace("/auth/login");
+        }
+    } else {
+        router.replace("/auth/login");
+    }
+});
+
+function handlePasswordIconClick() {
+    loginForm.value.passwordIconToggled = !loginForm.value.passwordIconToggled;
+}
+
+const handleLoginButtonClick = async () => {
+    loginForm.value.username_error = "";
+
+    try {
+        await login(loginForm.value.username, loginForm.value.password);
+        router.push('/');
+    } catch (e) {
+        loginForm.value.username_error = error.value || "Login failed. Please check your credentials.";
+    }
+};
+</script>
