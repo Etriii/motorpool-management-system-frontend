@@ -16,7 +16,10 @@
                         <a href="#features" class="hover:text-blue-600 transition-colors">Features</a>
                         <a href="#about" class="hover:text-blue-600 transition-colors">About</a>
                     </nav>
-                    <button @click="navigateToLogin"
+                    <button v-if="user" v-on:click="() => router.push('/')" class="rounded-lg bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-slate-800  focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900 transition-all">
+                        Home
+                    </button>
+                    <button v-else @click="navigateToLogin"
                         class="rounded-lg bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-slate-800  focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900 transition-all">
                         Login
                     </button>
@@ -146,9 +149,10 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-
+import { useAuthStore } from '@pages/auth/presentation/stores/useAuthStore'
 const router = useRouter()
 
+const { user } = useAuthStore()
 const navigateToLogin = () => {
     router.push('/auth/login')
 }

@@ -11,8 +11,9 @@ interface Props {
     exact?: boolean
 }
 
-const props = defineProps<Props>();
-
+const props = withDefaults(defineProps<Props>(), {
+  exact: true
+})
 /* 
 - the custom v-slot handles all activeClass styling and navigation
 */

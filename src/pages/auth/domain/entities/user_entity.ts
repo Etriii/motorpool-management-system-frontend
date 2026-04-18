@@ -1,4 +1,3 @@
-import type { Institute } from "@core/models";
 
 export interface UserEntity {
     username: string;
@@ -7,6 +6,16 @@ export interface UserEntity {
     email: string;
     exp: number | null;
     groups: string[];
-    institute: Institute | null;
     profile: string
 }
+
+
+type ROLE = 'admin' | 'advisor' | 'driver' | 'passenger'
+export interface MockUser {
+    username: string,
+    password: string,
+    role: ROLE
+    profile: string
+}
+
+

@@ -1,9 +1,7 @@
 <template>
     <div class="mx-auto w-auto border text-black bg-[#ffffff] border-purple-100 shadow-lg rounded-md p-2">
         <div class="p-4">
-            <h1 class="text-center text-md font-semibold text-purple-800">
-                Administrator
-            </h1>
+        
             <div class="text-center text-sm text-gray-600">
                 Welcome back! Please sign-in to continue
             </div>
@@ -33,33 +31,31 @@
                         Forgot password?
                     </RouterLink>
                 </div>
-                <!-- //disabled:loading -->
-                <Button variant="primary" size="md" :loading="loading" loadingText="Logging In..." :disabled="true"
+                <Button variant="primary" size="md" :loading="loading" loadingText="Logging In..." :disabled="loading"
                     type="submit"
                     className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white transition hover:from-purple-700 hover:to-indigo-700 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
                     Log In
                 </Button>
-                <div>Kani lang sa pag log in, focus sa mo sa UI</div>
-                <Button variant="primary" size="md" :loading="loading" loadingText="Logging In..." :disabled="false"
-                    type="button"
-                    className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white transition hover:from-purple-700 hover:to-indigo-700 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
-                    Admin
-                </Button>
-                <Button variant="primary" size="md" :loading="loading" loadingText="Logging In..." :disabled="false"
-                    type="button"
-                    className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white transition hover:from-purple-700 hover:to-indigo-700 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
-                    Advisor
-                </Button>
-                <Button variant="primary" size="md" :loading="loading" loadingText="Logging In..." :disabled="false"
-                    type="button"
-                    className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white transition hover:from-purple-700 hover:to-indigo-700 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
-                    Driver
-                </Button>
-                <Button variant="primary" size="md" :loading="loading" loadingText="Logging In..." :disabled="false"
-                    type="button"
-                    className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white transition hover:from-purple-700 hover:to-indigo-700 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
-                    Passenger
-                </Button>
+                <div class="max-w-sm space-y-2">
+                    <h3 class="text-sm font-semibold text-gray-700">Test Accounts</h3>
+
+                    <div v-for="user in mock_users" :key="user.username"
+                        class="rounded-md border border-gray-200 bg-white px-3 py-2 shadow-sm">
+                        <div class="flex items-center justify-between">
+                            <p class="text-sm font-medium text-gray-900">
+                                {{ user.username }}
+                            </p>
+                            <span class="text-xs text-gray-500 capitalize">
+                                {{ user.role }}
+                            </span>
+                        </div>
+
+                        <p class="text-xs text-gray-600 mt-1">
+                            <span class="font-medium">Pass:</span> {{ user.password }}
+                        </p>
+                    </div>
+                </div>
+
             </form>
 
             <p class="text-center text-gray-500 py-2">or</p>
@@ -87,11 +83,16 @@ import { CircleUser, LockKeyhole, EyeOff, Eye } from "lucide-vue-next";
 
 import Input from "@components/forms/Input.vue";
 import Button from "@components/button/Button.vue";
+import { ROUTES } from "@core/url_paths";
+
+import { mock_users } from "./presentation/stores/useAuthStore";
 
 const router = useRouter();
+
 const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
-const { login, loginWithGoogle, googleLoginRedirect, loading, error } = useAuth(googleClientId);
+const { login, loginWithGoogle, googleLoginRedirect, loading, user, error } = useAuth(googleClientId);
+
 
 
 const inputElement = ref(null);
@@ -111,7 +112,7 @@ onMounted(async () => {
     const hashParams = new URLSearchParams(
         window.location.hash.replace("#", "?")
     );
-
+    //   Typing to increase the time stats
     const idToken = hashParams.get("id_token");
 
     if (idToken) {
@@ -134,10 +135,22 @@ function handlePasswordIconClick() {
 
 const handleLoginButtonClick = async () => {
     loginForm.value.username_error = "";
-
     try {
         await login(loginForm.value.username, loginForm.value.password);
-        router.push('/');
+        if (user.value.role == "admin") {
+            router.push(ROUTES.admin.dashboard);
+        }
+        else if (user.value.role == "advisor") {
+            router.push(ROUTES.advisor.dashboard);
+        }
+        else if (user.value.role == "driver") {
+            router.push(ROUTES.driver.dashboard);
+        }
+        else if (user.value.role == "passenger") {
+            router.push(ROUTES.passenger.dashboard);
+        } else {
+            router.push("/")
+        }
     } catch (e) {
         loginForm.value.username_error = error.value || "Login failed. Please check your credentials.";
     }

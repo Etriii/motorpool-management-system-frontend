@@ -7,3 +7,18 @@ export { default as PageNotFound } from './PageNotFound.vue'
 export { default as Unauthorized } from '@pages/auth/Unauthorized.vue'
 
 export {default as HomePage} from '@pages/homepage/HomePage.vue'
+
+// ADMIN
+export {default as AdminDashboard} from '@pages/admin/AdminDashboard.vue'
+export {default as AdminSamplePage} from '@pages/admin/AdminSamplePage.vue'
+
+// ADVISOR
+export {default as AdvisorDashboard} from '@pages/advisor/AdvisorDashboard.vue'
+
+
+// DRIVER
+export {default as DriverDashboard} from '@pages/driver/DriverDashboard.vue'
+
+
+// PASSENGER
+export {default as PassengerDashboard} from '@pages/passenger/PassengerDashboard.vue'

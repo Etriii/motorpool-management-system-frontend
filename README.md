@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.icons8.com/fluency/200/car-service.png" width="150" alt="Motorpool Logo">
+  <img src="/public/images/dnsc.png" width="150" alt="Motorpool Logo">
 </p>
 
 <h1 align="center">Motorpool Services Management System (MSMS)</h1>

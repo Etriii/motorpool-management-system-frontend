@@ -64,8 +64,10 @@ onBeforeUnmount(() => {
             <div ref="profileMenuRef" class="relative w-10 cursor-pointer" @click="toggleProfileMenu">
                 <div class="relative size-10">
                     <div class="absolute inset-0 rounded-full ring-3 ring-gray-300 animate-pulse"></div>
-                    <img :src="props.profilePicPath || temp_image" alt="logo"
-                        class="relative  h-full w-full rounded-full object-center shadow-lg" />
+                    <div class="w-10 h-10">
+                        <img :src="props.profilePicPath || temp_image" alt="logo"
+                            class="w-full h-full rounded-full object-cover shadow-lg" />
+                    </div>
                 </div>
 
                 <ChevronDown :size="15"

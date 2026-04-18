@@ -98,15 +98,15 @@ export function useAuth(googleClientId?: string) {
     window.location.href = url;
   };
 
-  function isStudent(): boolean {
-    if (!user.value?.groups) return false
-    return user.value.groups.some((g: string) => {
-      const group = g.toLowerCase()
-      return (
-        group === "students"
-      )
-    })
-  }
+  // function isStudent(): boolean {
+  //   if (!user.value?.groups) return false
+  //   return user.value.groups.some((g: string) => {
+  //     const group = g.toLowerCase()
+  //     return (
+  //       group === "students"
+  //     )
+  //   })
+  // }
 
-  return { user, loading, error, login, loginWithGoogle, googleLoginRedirect, logout, isStudent }; //isAllowedToLogin, handleGoogleLogin
+  return { user, loading, error, login, loginWithGoogle, googleLoginRedirect, logout }; //isAllowedToLogin, handleGoogleLogin, isStudent
 }

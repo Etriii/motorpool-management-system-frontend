@@ -25,8 +25,7 @@ const contentClass = computed(() => {
 })
 
 
-// const { user } = useAuth();
-const user = ref({ username: 'User', profile: null })
+const { user } = useAuth();
 const currentUser = user.value
 
 const { width } = useScreenWidth()
@@ -40,8 +39,9 @@ const isMobile = computed(() => width.value < 768)
 
     <Sidebar :sidebarWidth="sidebarWidth" :isSidebarOpen="isSidebarOpen" :isMobile="isMobile" />
 
-    <Navbar :isSidebarOpen="isSidebarOpen" :contentClass="contentClass" :toggleSidebar="toggleSidebar"
-        :pageTitle="pageTitle" :username="currentUser.username" :profilePicPath="currentUser.profile" />
+    <Navbar v-if="currentUser" :isSidebarOpen="isSidebarOpen" :contentClass="contentClass"
+        :toggleSidebar="toggleSidebar" :pageTitle="pageTitle" :username="currentUser.username"
+        :profilePicPath="currentUser.profile" />
 
     <div class="p-4 transition-all duration-300 overflow-y-auto h-[calc(100vh-navbarHeight)]" :class="contentClass">
         <RouterView />

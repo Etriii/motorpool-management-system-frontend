@@ -29,8 +29,17 @@ export const ENDPOINTS = {
 };
 
 export const ROUTES = {
-  admin: {},
-  advisors: {},
-  drivers: {},
-  passengers: {},
+  admin: {
+    dashboard: '/admin',
+    sample_page: '/admin/sample_page',
+  },
+  advisor: {
+    dashboard: '/advisor'
+  },
+  driver: {
+    dashboard: '/driver'
+  },
+  passenger: {
+    dashboard: '/passenger'
+  },
 }

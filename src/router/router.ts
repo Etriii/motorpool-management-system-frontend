@@ -3,14 +3,16 @@ import type { RouteRecordRaw } from 'vue-router'
 
 import AuthenticatedLayout from "@layouts/AuthenticatedLayout.vue";
 
-import { MyAccount, Login, AccountRecovery, PageNotFound, AccountRecoveryConfirmaion, Unauthorized, HomePage } from '@pages/index.ts';
+import { MyAccount, Login, AccountRecovery, PageNotFound, AccountRecoveryConfirmaion, Unauthorized, HomePage, AdminDashboard, AdvisorDashboard, DriverDashboard, PassengerDashboard, AdminSamplePage } from '@pages/index.ts';
 
 import LogInSignupLayout from "@layouts/LogInSignupLayout.vue";
 // import { Roles } from "@core/constants";
 
+import { useAuthStore } from "@pages/auth/presentation/stores/useAuthStore";
+
 const routes: RouteRecordRaw[] = [
     {
-        path: '/',
+        path: '/home',
         component: HomePage,
     },
     {
@@ -27,12 +29,51 @@ const routes: RouteRecordRaw[] = [
             {
                 path: 'admin',
                 children: [
-                    // {
-                    //     path: '/',
-                    //     name: 'Dashboard',
-                    //     component: AdminDashboard,
-                    //     meta: { pageTitle: 'Admin Dashboard' },
-                    // }, IN CONSIDERATOIN PA KAY MA TANGGONG SA 
+                    {
+                        path: '',
+                        name: 'Admin Dashboard',
+                        component: AdminDashboard,
+                        meta: { pageTitle: 'Admin Dashboard' },
+                    },
+                    {
+                        path: 'sample_page',
+                        name: 'Sample Page for Admin',
+                        component: AdminSamplePage,
+                        meta: { pageTitle: 'Admin Sample Page' },
+                    },
+                ]
+            },
+            {
+                path: 'advisor',
+                children: [
+                    {
+                        path: '',
+                        name: 'Advisor Dashboard',
+                        component: AdvisorDashboard,
+                        meta: { pageTitle: 'Advisor Dashboard' },
+                    },
+                ]
+            },
+            {
+                path: 'driver',
+                children: [
+                    {
+                        path: '',
+                        name: 'Driver Dashboard',
+                        component: DriverDashboard,
+                        meta: { pageTitle: 'Driver Dashboard' },
+                    },
+                ]
+            },
+            {
+                path: 'passenger',
+                children: [
+                    {
+                        path: '',
+                        name: 'Passenger Dashboard',
+                        component: PassengerDashboard,
+                        meta: { pageTitle: 'Passenger Dashboard' },
+                    },
                 ]
             },
         ],
@@ -80,21 +121,21 @@ const router = createRouter({
 
 router.beforeEach(async (to, _from, next) => {
     // const { user } = useAuth();
-    // const authStore = useAuthStore();
+    const authStore = useAuthStore();
 
-    // if (!authStore.initialized) {
-    //     await authStore.initialize();
-    // }
+    if (!authStore.initialized) {
+        await authStore.initialize();
+    }
 
-    // const isLoggedIn = !!authStore.user;
+    const isLoggedIn = !!authStore.user;
 
-    // if (to.meta.requiresAuth && !isLoggedIn) {
-    //     return next("/auth/login");
-    // }
+    if (to.meta.requiresAuth && !isLoggedIn) {
+        return next("/auth/login");
+    }
 
-    // if (to.path.startsWith("/auth") && isLoggedIn) {
-    //     return next("/");
-    // }
+    if (to.path.startsWith("/auth") && isLoggedIn) {
+        return next("/");
+    }
 
     // const allowedRoles = to.meta.roles as string[] | undefined
     // if (allowedRoles && user.value?.groups) {
